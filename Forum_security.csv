@@ -1,0 +1,9 @@
+/account,,,
+Endpoints,Method,Authentication,Authorization
+/register,POST,no,no
+/login,POST,yes,"expDate, have roles"
+/user/{login},PUT,yes,"expDate, have roles, validate user"
+/user/{login},DELETE,yes,validate user
+/user/{login}/role/{role},PUT,yes,validate Administrator
+/user/{login}/role/{role},DELETE,yes,validate Administrator
+user/password,PUT,yes,no
