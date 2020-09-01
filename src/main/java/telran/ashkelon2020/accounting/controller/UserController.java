@@ -38,16 +38,16 @@ public class UserController {
 		return userService.findUserByLogin(principal.getName());
 	}
 
-	@DeleteMapping("/user/{login}")
-	public UserResponseDto deleteUser(@PathVariable String login) {
-		return userService.deleteUser(login);
-	}
-
 	@PutMapping("/user/{login}")
 	public UserResponseDto updateUser(@PathVariable String login, @RequestBody UserUpdateDto userUpdateDto) {
 		return userService.updateUser(login, userUpdateDto);
 	}
 
+	@DeleteMapping("/user/{login}")
+	public UserResponseDto deleteUser(@PathVariable String login) {
+		return userService.deleteUser(login);
+	}
+	
 	@PutMapping("/user/{login}/role/{role}")
 	public UserResponseDto addRole(@PathVariable String login, @PathVariable String role) {
 		return userService.changeRolesList(login, role, true);
@@ -58,7 +58,7 @@ public class UserController {
 		return userService.changeRolesList(login, role, false);
 	}
 
-	@PutMapping("/user/password")
+	@PutMapping("/password")
 	public UserResponseDto changeUserPassword(@RequestHeader("X-Password") String password, Principal principal) {
 		return userService.changeUserPassword(principal.getName(), password);
 	}

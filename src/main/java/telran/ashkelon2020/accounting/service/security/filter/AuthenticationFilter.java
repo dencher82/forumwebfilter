@@ -33,8 +33,9 @@ public class AuthenticationFilter implements Filter { // works between Tomcat an
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) resp;
 		String path = request.getServletPath();
+		String method = request.getMethod();
 		String token = request.getHeader("Authorization");
-		if (!"/account/register".equalsIgnoreCase(path)) {
+		if (checkPathAndMethod(path, method)) {
 			String sessionId = request.getSession().getId(); // generates in the first connect with server and writes in
 																// cookies
 			if (sessionId != null && token == null) {
@@ -62,6 +63,11 @@ public class AuthenticationFilter implements Filter { // works between Tomcat an
 			}
 		}
 		chain.doFilter(request, response);
+	}
+
+	private boolean checkPathAndMethod(String path, String method) {
+		boolean res = "/account/register".equalsIgnoreCase(path) || "GET".equalsIgnoreCase(method) || path.startsWith("/forum/posts/");
+		return !res;
 	}
 
 	private class WrapperRequest extends HttpServletRequestWrapper {

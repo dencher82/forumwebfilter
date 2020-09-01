@@ -30,8 +30,7 @@ public class ExpDateFilter implements Filter {
 		HttpServletResponse response = (HttpServletResponse) resp;
 		String path = request.getServletPath();
 		String method = request.getMethod();
-		String headerXPassword = request.getHeader("X-Password");
-		if (checkPathMethodAndHeader(path, method, headerXPassword)) {
+		if (checkPathAndMethod(path, method)) {
 			try {
 				securityService.checkExpDate(request.getUserPrincipal().getName());
 			} catch (ForbiddenException e) {
@@ -42,9 +41,10 @@ public class ExpDateFilter implements Filter {
 		chain.doFilter(request, response);
 	}
 
-	private boolean checkPathMethodAndHeader(String path, String method, String header) {
+	private boolean checkPathAndMethod(String path, String method) {
 		boolean res = "/account/login".equalsIgnoreCase(path) && "POST".equalsIgnoreCase(method);
-		res = res || ("PUT".equalsIgnoreCase(method) && path.matches("^/account/user/\\w+[^/]\\w+") && header == null);
+		res = res || ("PUT".equalsIgnoreCase(method) && path.matches("^/account/user/\\w+[^/]\\w+"))
+				|| (path.startsWith("/forum/post/") && !"GET".equalsIgnoreCase(method));
 		return res;
 	}
 

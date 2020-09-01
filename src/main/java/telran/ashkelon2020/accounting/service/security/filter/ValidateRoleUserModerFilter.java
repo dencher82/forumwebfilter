@@ -17,8 +17,8 @@ import org.springframework.stereotype.Service;
 import telran.ashkelon2020.accounting.service.security.AccountSecurity;
 
 @Service
-@Order(50)
-public class ValidateAdminFilter implements Filter {
+@Order(60)
+public class ValidateRoleUserModerFilter implements Filter {
 	
 	@Autowired
 	AccountSecurity securityService;
@@ -29,10 +29,11 @@ public class ValidateAdminFilter implements Filter {
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) resp;
 		String path = request.getServletPath();
-		if (checkPath(path)) {
+		String method = request.getMethod();
+		if (checkPathAndMethod(path, method)) {
 			String token = request.getHeader("Authorization");
 			String login = securityService.getLogin(token);
-			if (!securityService.checkRole(login, "ADMIN")) {
+			if (!securityService.checkRole(login, "USER") || !securityService.checkRole(login, "MODERATOR")) {
 				response.sendError(403, "Not enough rights");
 				return;
 			}
@@ -40,8 +41,10 @@ public class ValidateAdminFilter implements Filter {
 		chain.doFilter(request, response);
 	}
 
-	private boolean checkPath(String path) {
-		return path.contains("/role/");
+	private boolean checkPathAndMethod(String path, String method) {
+		int size = path.split("/").length;
+		boolean res = ("PUT".equalsIgnoreCase(method) || "DELETE".equalsIgnoreCase(method)) && size == 4;
+		return res;
 	}
 	
 	

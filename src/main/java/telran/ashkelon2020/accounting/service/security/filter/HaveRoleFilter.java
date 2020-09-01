@@ -19,10 +19,10 @@ import telran.ashkelon2020.accounting.service.security.AccountSecurity;
 @Service
 @Order(30)
 public class HaveRoleFilter implements Filter {
-	
+
 	@Autowired
 	AccountSecurity securityService;
-	
+
 	@Override
 	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain)
 			throws IOException, ServletException {
@@ -30,20 +30,21 @@ public class HaveRoleFilter implements Filter {
 		HttpServletResponse response = (HttpServletResponse) resp;
 		String path = request.getServletPath();
 		String method = request.getMethod();
-		String headerXPassword = request.getHeader("X-Password");
-		if (checkPathMethodAndHeader(path, method, headerXPassword)) {
+		System.out.println(path + " " + method);
+		if (checkPathAndMethod(path, method)) {
 			if (securityService.isBanned(request.getUserPrincipal().getName())) {
 				response.sendError(403, "The user is banned");
 				return;
 			}
-		}		
+		}
 		chain.doFilter(request, response);
 	}
 
-	private boolean checkPathMethodAndHeader(String path, String method, String header) {
+	private boolean checkPathAndMethod(String path, String method) {
 		boolean res = "/account/login".equalsIgnoreCase(path) && "POST".equalsIgnoreCase(method);
-		res = res || ("PUT".equalsIgnoreCase(method) && path.matches("^/account/user/\\w+[^/]\\w+") && header == null);
+		res = res || ("PUT".equalsIgnoreCase(method) && path.matches("^/account/user/\\w+[^/]\\w+"));
+		res = res || (path.startsWith("/forum/post/") && !"GET".equalsIgnoreCase(method));
 		return res;
 	}
-	
+
 }

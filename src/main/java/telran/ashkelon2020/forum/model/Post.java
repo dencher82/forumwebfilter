@@ -17,7 +17,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @AllArgsConstructor
-@Document(collection = "post")
+@Document(collection = "posts")
 @EqualsAndHashCode(of = { "id" })
 public class Post {
 	String id;
