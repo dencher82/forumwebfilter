@@ -6,4 +6,17 @@ Endpoints,Method,Authentication,Authorization
 /user/{login},DELETE,yes,validate user
 /user/{login}/role/{role},PUT,yes,validate Administrator
 /user/{login}/role/{role},DELETE,yes,validate Administrator
-user/password,PUT,yes,no
+/password,PUT,yes,no
+,,,
+/forum,,,
+/post/{author},POST,yes,"expDate, have roles, validate user"
+/post/{id},GET,no,no
+/post/{id},DELETE,yes,"expDate, have roles, (validate user or Moderator)"
+/post/{id},PUT,yes,"expDate, have roles, (validate user or Moderator)"
+/post/{id}/like,PUT,yes,"expDate, have roles"
+/post/{id}/comment/{author},PUT,yes,"expDate, have roles, validate user"
+/posts/author/{author},GET,no,no
+/posts/tags,POST,no,no
+/posts/period,POST,no,no
+/post/{id}/comments,GET,no,no
+/post/{id}/author/{author}/comments,GET,no,no

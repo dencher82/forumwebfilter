@@ -30,14 +30,9 @@ public class ValidateUserFilter implements Filter {
 		String path = request.getServletPath();
 		String method = request.getMethod();
 		if (checkPathAndMethod(path, method)) {
-			String token = request.getHeader("Authorization");
-			String login = securityService.getLogin(token);
 			String[] pathElements = path.split("/");
-			String user = pathElements[3];
-			if (pathElements.length > 3) {
-				user = pathElements[5];
-			}			
-			if (!user.equals(login)) {
+			String user = pathElements[pathElements.length - 1];
+			if (!user.equals(request.getUserPrincipal().getName())) {
 				response.sendError(403);
 				return;
 			}

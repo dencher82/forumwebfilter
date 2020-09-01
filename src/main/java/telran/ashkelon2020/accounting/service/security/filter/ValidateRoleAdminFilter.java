@@ -30,9 +30,7 @@ public class ValidateRoleAdminFilter implements Filter {
 		HttpServletResponse response = (HttpServletResponse) resp;
 		String path = request.getServletPath();
 		if (checkPath(path)) {
-			String token = request.getHeader("Authorization");
-			String login = securityService.getLogin(token);
-			if (!securityService.checkRole(login, "ADMIN")) {
+			if (!securityService.checkRole(request.getUserPrincipal().getName(), "ADMIN")) {
 				response.sendError(403, "Not enough rights");
 				return;
 			}

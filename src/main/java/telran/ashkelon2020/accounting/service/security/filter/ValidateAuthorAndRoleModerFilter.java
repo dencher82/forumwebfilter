@@ -15,13 +15,18 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import telran.ashkelon2020.accounting.service.security.AccountSecurity;
+import telran.ashkelon2020.forum.dao.ForumRepositoryMongoDB;
+import telran.ashkelon2020.forum.model.Post;
 
 @Service
 @Order(60)
-public class ValidateRoleUserModerFilter implements Filter {
+public class ValidateAuthorAndRoleModerFilter implements Filter {
 	
 	@Autowired
 	AccountSecurity securityService;
+	
+	@Autowired
+	ForumRepositoryMongoDB forumRepository;
 
 	@Override
 	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain)
@@ -31,9 +36,15 @@ public class ValidateRoleUserModerFilter implements Filter {
 		String path = request.getServletPath();
 		String method = request.getMethod();
 		if (checkPathAndMethod(path, method)) {
-			String token = request.getHeader("Authorization");
-			String login = securityService.getLogin(token);
-			if (!securityService.checkRole(login, "USER") || !securityService.checkRole(login, "MODERATOR")) {
+			String login = request.getUserPrincipal().getName();
+			String id = path.split("/")[3];
+			Post post = forumRepository.findById(id).orElse(null);
+			if (post == null) {
+				response.sendError(404, "Post not found");
+				return;
+			}
+			String author = post.getAuthor();
+			if (!(login.equals(author) || securityService.checkRole(login, "MODERATOR"))) {
 				response.sendError(403, "Not enough rights");
 				return;
 			}

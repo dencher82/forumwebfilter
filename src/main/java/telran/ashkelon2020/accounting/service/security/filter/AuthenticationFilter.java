@@ -45,7 +45,7 @@ public class AuthenticationFilter implements Filter { // works between Tomcat an
 					chain.doFilter(request, response);
 					return;
 				}
-			}			
+			}
 			String login = "";
 			try {
 				login = securityService.getLogin(token);

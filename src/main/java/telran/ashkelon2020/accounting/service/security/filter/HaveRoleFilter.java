@@ -30,7 +30,6 @@ public class HaveRoleFilter implements Filter {
 		HttpServletResponse response = (HttpServletResponse) resp;
 		String path = request.getServletPath();
 		String method = request.getMethod();
-		System.out.println(path + " " + method);
 		if (checkPathAndMethod(path, method)) {
 			if (securityService.isBanned(request.getUserPrincipal().getName())) {
 				response.sendError(403, "The user is banned");
