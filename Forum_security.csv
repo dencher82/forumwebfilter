@@ -1,22 +1,22 @@
-/account,,,
-Endpoints,Method,Authentication,Authorization
-/register,POST,no,no
-/login,POST,yes,"expDate, have roles"
-/user/{login},PUT,yes,"expDate, have roles, validate user"
-/user/{login},DELETE,yes,validate user
-/user/{login}/role/{role},PUT,yes,validate Administrator
-/user/{login}/role/{role},DELETE,yes,validate Administrator
-/password,PUT,yes,no
-,,,
-/forum,,,
-/post/{author},POST,yes,"expDate, have roles, validate user"
-/post/{id},GET,no,no
-/post/{id},DELETE,yes,"expDate, have roles, (validate user or Moderator)"
-/post/{id},PUT,yes,"expDate, have roles, (validate user or Moderator)"
-/post/{id}/like,PUT,yes,"expDate, have roles"
-/post/{id}/comment/{author},PUT,yes,"expDate, have roles, validate user"
-/posts/author/{author},GET,no,no
-/posts/tags,POST,no,no
-/posts/period,POST,no,no
-/post/{id}/comments,GET,no,no
-/post/{id}/author/{author}/comments,GET,no,no
+,/account,,,
+Controller method,Endpoints,Method,Authentication,Authorization
+register,/register,POST,no,no
+login,/login,POST,yes,"expDate, have roles"
+updateUser,/user/{login},PUT,yes,"expDate, have roles, validate user"
+deleteUser,/user/{login},DELETE,yes,validate user
+addRole,/user/{login}/role/{role},PUT,yes,validate Administrator
+deleteRole,/user/{login}/role/{role},DELETE,yes,validate Administrator
+changeUserPassword,/password,PUT,yes,no
+,,,,
+,/forum,,,
+addPost,/post/{author},POST,yes,"expDate, have roles, validate author"
+findPostById,/post/{id},GET,no,no
+deletePost,/post/{id},DELETE,yes,"expDate, have roles, (validate author or Moderator)"
+updatePost,/post/{id},PUT,yes,"expDate, have roles, (validate author or Moderator)"
+addLikeToPost,/post/{id}/like,PUT,yes,"expDate, have roles"
+addCommentToPost,/post/{id}/comment/{author},PUT,yes,"expDate, have roles, validate author"
+findPostsByAuthor,/posts/author/{author},GET,no,no
+findPostsByTag,/posts/tags,POST,no,no
+findPostsByDates,/posts/period,POST,no,no
+findAllPostComments,/post/{id}/comments,GET,no,no
+findAllPostCommentsByAuthor,/post/{id}/author/{author}/comments,GET,no,no
