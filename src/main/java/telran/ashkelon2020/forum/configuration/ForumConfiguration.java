@@ -25,7 +25,6 @@ public class ForumConfiguration {
 	}
 	
 	@Bean
-	@Bean
 	public Docket getApi() {
 		return new Docket(DocumentationType.SWAGGER_2)
 				.select()
